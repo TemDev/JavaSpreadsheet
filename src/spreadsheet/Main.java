@@ -1,7 +1,6 @@
 package spreadsheet;
 
 import common.api.CellLocation;
-
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +16,7 @@ public class Main {
    *
    * <p>DO NOT CHANGE THE SIGNATURE. The test suite depends on this.
    */
-  public static void interact(InputStream input, PrintStream output) throws IOException{
+  public static void interact(InputStream input, PrintStream output) throws IOException {
     Spreadsheet spreadsheet = new Spreadsheet();
     BufferedReader in = new BufferedReader(new InputStreamReader(input));
     while (true) {
@@ -30,12 +29,14 @@ public class Main {
       if (parts.length == 1) {
         try {
           output.println(spreadsheet.evaluateExpression(line));
-        } catch (InvalidSyntaxException ignored) {}
+        } catch (InvalidSyntaxException ignored) {
+          output.println("Syntax of line input is wrong.");
+        }
       } else {
         try {
           spreadsheet.setCellExpression(new CellLocation(parts[0]), parts[1]);
         } catch (InvalidSyntaxException invalidSyntaxException) {
-          System.out.println("Invalid assignment entered.");
+          output.println("Invalid assignment entered.");
         }
       }
     }

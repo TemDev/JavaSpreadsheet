@@ -2,7 +2,6 @@ package spreadsheet;
 
 import common.api.CellLocation;
 import common.api.EvaluationContext;
-
 import java.util.HashMap;
 import java.util.Map;
 

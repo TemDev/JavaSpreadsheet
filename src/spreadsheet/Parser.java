@@ -4,12 +4,11 @@ import common.api.Expression;
 import common.lexer.InvalidTokenException;
 import common.lexer.Lexer;
 import common.lexer.Token;
-
-import javax.swing.text.Caret;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Stack;
+import javax.swing.text.Caret;
 
 
 public class Parser {
@@ -18,13 +17,14 @@ public class Parser {
    *
    * <p>DO NOT CHANGE THE SIGNATURE. The test suite depends on this.
    */
-  static Expression parse(String input) throws InvalidSyntaxException{
+  static Expression parse(String input) throws InvalidSyntaxException {
 
     final Lexer lexer = new Lexer(input);
     final HashMap<Token.Kind, String> kindOp = new HashMap<>();
     final HashMap<Token.Kind, Integer> opPrecedence = new HashMap<>();
-    final var binaryOperators = List.of(Token.Kind.PLUS, Token.Kind.MINUS, Token.Kind.STAR, Token.Kind.SLASH,
-            Token.Kind.CARET, Token.Kind.LPARENTHESIS, Token.Kind.RPARENTHESIS);
+    final var binaryOperators = List.of(Token.Kind.PLUS, Token.Kind.MINUS,
+            Token.Kind.STAR, Token.Kind.SLASH, Token.Kind.CARET,
+            Token.Kind.LPARENTHESIS, Token.Kind.RPARENTHESIS);
     final var rightAssociative = List.of(Token.Kind.CARET);
 
     kindOp.put(Token.Kind.PLUS, "+");
@@ -66,11 +66,14 @@ public class Parser {
 
           operandStack.push(new CellReferences(token.cellLocationValue));
 
-        } else if (binaryOperators.contains(token.kind) ){
-          while (operatorStack.size() > 0 && (opPrecedence.get(operatorStack.peek()) > opPrecedence.get(token.kind)
-                  || (Objects.equals(opPrecedence.get(operatorStack.peek()), opPrecedence.get(token.kind))
+        } else if (binaryOperators.contains(token.kind)) {
+          while (operatorStack.size() > 0
+                  && (opPrecedence.get(operatorStack.peek()) > opPrecedence.get(token.kind)
+                  || (Objects.equals(opPrecedence.get(operatorStack.peek()),
+                  opPrecedence.get(token.kind))
                   && !rightAssociative.contains(operatorStack.peek())))) {
-            if (operatorStack.peek() == Token.Kind.LPARENTHESIS && token.kind != Token.Kind.RPARENTHESIS) {
+            if (operatorStack.peek() == Token.Kind.LPARENTHESIS
+                    && token.kind != Token.Kind.RPARENTHESIS) {
               break;
             }
             Token.Kind op = operatorStack.pop();
@@ -79,7 +82,8 @@ public class Parser {
             }
             Expression exp1 = operandStack.pop();
             Expression exp2 = operandStack.pop();
-            BinaryOperatorApplications boa = new BinaryOperatorApplications(kindOp.get(op), exp2, exp1);
+            BinaryOperatorApplications boa =
+                    new BinaryOperatorApplications(kindOp.get(op), exp2, exp1);
             operandStack.push(boa);
           }
           if (token.kind != Token.Kind.RPARENTHESIS) {
@@ -93,7 +97,8 @@ public class Parser {
     for (int i = operatorStack.size() - 1; i > -1; i--) {
       Expression exp1 = operandStack.pop();
       Expression exp2 = operandStack.pop();
-      BinaryOperatorApplications boa = new BinaryOperatorApplications(kindOp.get(operatorStack.pop()), exp2, exp1);
+      BinaryOperatorApplications boa =
+              new BinaryOperatorApplications(kindOp.get(operatorStack.pop()), exp2, exp1);
       operandStack.push(boa);
     }
     return operandStack.pop();

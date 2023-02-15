@@ -3,7 +3,6 @@ package spreadsheet;
 import common.api.CellLocation;
 import common.api.EvaluationContext;
 import common.api.Expression;
-
 import java.util.Set;
 
 public class BinaryOperatorApplications implements Expression {
@@ -13,23 +12,18 @@ public class BinaryOperatorApplications implements Expression {
     private final Expression rightTree;
 
     public static void main(String[] args) {
-        BinaryOperatorApplications boa = new BinaryOperatorApplications("+", new Numbers(1), new Numbers(2));
+        BinaryOperatorApplications boa =
+                new BinaryOperatorApplications("+", new Numbers(1), new Numbers(2));
         System.out.println(boa);
     }
 
-    public BinaryOperatorApplications(String binaryOperator, Expression leftTree, Expression rightTree) {
+    public BinaryOperatorApplications(String binaryOperator,
+                                      Expression leftTree, Expression rightTree) {
         this.binaryOperator = binaryOperator;
         this.leftTree = leftTree;
         this.rightTree = rightTree;
     }
 
-    /**
-     * Evaluate the expression as a double value.
-     *
-     * <p>The provided `EvaluationContext` may be used to lookup the value of other cells.
-     *
-     * @param context
-     */
     @Override
     public double evaluate(EvaluationContext context) {
         return switch (binaryOperator) {
@@ -42,13 +36,6 @@ public class BinaryOperatorApplications implements Expression {
         };
     }
 
-    /**
-     * Find all cell locations referenced by this expression (and its subexpressions).
-     *
-     * <p>The cell locations should be added to the `dependencies` set.
-     *
-     * @param dependencies
-     */
     @Override
     public void findCellReferences(Set<CellLocation> dependencies) {
         leftTree.findCellReferences(dependencies);
